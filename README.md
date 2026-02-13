@@ -1,2 +1,1 @@
-# mevent
-fullstack complete application hosting
+# MIVENT
