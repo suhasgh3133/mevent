@@ -1,11 +1,13 @@
-// Express-based backend scaffold to match frontend API expectations
-// Load environment variables from .env when present
-require("dotenv").config();
+/**
+ * Express App Configuration and Route Setup
+ * This file configures the Express app with middleware and routes
+ * Use server.js to start the server
+ */
+
 const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
-const mongoose = require("mongoose");
 
 // Utilities
 const logger = require("./utils/logger");
@@ -31,14 +33,6 @@ const plansRoutes = require("./routes/plans");
 const announcementsRoutes = require("./routes/announcements");
 const notificationsRoutes = require("./routes/notifications");
 const maintenanceRoutes = require("./routes/maintenance");
-
-const port = process.env.PORT || 5000;
-
-// MongoDB connection URI. You can override with the environment variable MONGODB_URI.
-// Default: connect to a local MongoDB instance and use the `photoflow` database.
-const MONGODB_URI =
-  process.env.MONGODB_URI ||
-  "mongodb+srv://mivent:1234567890@cluster0.y3o7p0b.mongodb.net/photoflow";
 
 const app = express();
 
@@ -119,42 +113,4 @@ app.use((req, res, next) => {
 // Global error handler
 app.use(errorHandler);
 
-// Connect to MongoDB first, then start the Express server.
-mongoose
-  .connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    logger.info(`Connected to MongoDB`, null, "MongoDB");
-    // Load/compile models so they are available to controllers
-    try {
-      // eslint-disable-next-line global-require
-      require("./models/User");
-      // eslint-disable-next-line global-require
-      require("./models/Policy");
-      // eslint-disable-next-line global-require
-      require("./models/TeamMember");
-    } catch (e) {
-      logger.warn("Could not load models", { error: e && e.message }, "Server");
-    }
-    app.listen(port, () => {
-      logger.info(
-        `Server listening on http://localhost:${port}`,
-        null,
-        "Server",
-      );
-    });
-  })
-  .catch((err) => {
-    logger.error("Failed to connect to MongoDB", err, "MongoDB");
-    process.exit(1);
-  });
-
-// Graceful shutdown
-process.on("SIGINT", async () => {
-  logger.info("Shutting down: disconnecting from MongoDB...", null, "Server");
-  try {
-    await mongoose.disconnect();
-  } catch (e) {
-    logger.error("Error disconnecting mongoose", e, "Server");
-  }
-  process.exit(0);
-});
+module.exports = app;

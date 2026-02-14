@@ -2,11 +2,11 @@
   "name": "photoflow-backend",
   "version": "0.1.0",
   "private": true,
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "node index.js",
-    "prod": "NODE_ENV=production node index.js",
+    "start": "node server.js",
+    "dev": "node server.js",
+    "prod": "NODE_ENV=production node server.js",
     "test-email": "node test-email.js"
   },
   "engines": {
